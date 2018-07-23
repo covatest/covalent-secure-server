@@ -1,0 +1,38 @@
+TODO
+
+finish the flask app
+- sends various updates to MT And DO
+	* CS2 started
+	* Installed necessary dependencies and built docker environment
+	* Downloaded data from DO
+	* Downloaded model from MT
+	* Started secure environment inside CS2
+	* Decrypted data and started training models inside offline sandboxes
+	* Finished model training 
+	* Smart contract executed and DO was credited
+	* Sent compressed model structure to Model Trainer
+- starts docker ondemand 
+- send model data
+- send cova to DO
+
+
+
+
+Tonight:
+1. Find 6 versatile datasets
+	Get 1
+2. Run model on 1
+3. be able to run it from the docker sandbothex
+4. Finish the simple flask app and deploy with gunicorn
+5. then find 5 more datasets
+6. 
+
+
+
+Datasets:
+	1. Breast Cancer (UCL)
+	2. Heart disease data
+	3. 
+	4. Income data
+	5. MNIST
+	6. 
