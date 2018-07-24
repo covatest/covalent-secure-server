@@ -1,21 +1,33 @@
-from flask import Flask
-from server_helpers import run_model_in_docker
+from flask import Flask, request, render_template
+import base64
+app = Flask(__name__)
 
-application = Flask(__name__)
+def convert_to_original(cd):
+    return base64.b64decode(cd)
 
+@app.route('/data_owner')
+def data_owner_form():
+    return render_template('data-owner-form.html')
 
-@application.route('/train_model_file')
-def train_model_file():
-    # process file and vars
-    params = {}
-    run_model_in_docker(**params)
+@app.route('/data_owner', methods=['POST'])
+def data_owner_post():
+    text = request.form['Data Key']
+    f=open('key.txt','w')
+    f.write(text)
+    return 'Data is logged'
+
+@app.route('/model_trainer')
+def model_trainer_form():
+    return render_template('model-trainer-form.html')
+
+@app.route('/model_trainer', methods=['POST'])
+def model_trainer_post():
+    f=open('data_hash.txt','w')
+    f.write(request.form['Data Hash'])
+    f=open('model_train.py','wb')
+    f.write(convert_to_original(request.form['Code']))
+    return 'Data is logged'
     
-    return {}
-
-
-@application.route('/recv_decryption_key')
-def recv_decryption_key(name):
-    return "Hello {}!".format(name)
 
 if __name__ == '__main__':
-    application.run()
+    app.run()
