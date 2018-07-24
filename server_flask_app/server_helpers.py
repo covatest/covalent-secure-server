@@ -50,3 +50,8 @@ def run_model_in_docker():
     start_docker(trans_hash)
     # read logfile
     return {"success": True}
+
+def send_back_model_params(model_params_filepath):
+    # send the file to MT
+    
+    return 
