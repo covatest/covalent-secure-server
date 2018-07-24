@@ -1,12 +1,20 @@
 #!/bin/bash
 # install python pip 
-# install packages: pynacl
-# wget data
-# decrypt file and save
+# curl https://bootstrap.pypa.io/get-pip.py -o get-pip.py
+# python get-pip.py --user
+# rm get-pip.py
+# pip install gunicorn flask --user # do version
+
+# wget the cs2 git
+# wget  https://github.com/covalent-hq/covalent-secure-server/archive/master.tar.gz
+# tar  -xvf master.tar.gz
 # wget the secure library
-# start a docker core
-# send key to DO
-# send encrypted data to MT
+# wget  https://github.com/covalent-hq/covalent-secure-server/archive/master.tar.gz
+# tar  -xvf master.tar.gz
+
+# start the python server
+# cd server_flask_app
+# gunicorn -w 3 -b 0.0.0.0:8000 wsgi
 
 echo "start"
 docker run --rm \

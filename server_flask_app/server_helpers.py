@@ -30,7 +30,13 @@ def download_data_file(encrypted_data_hash):
         with open(encrypted_file_path,"wb+") as f:
             f.write(data)
 
-def start_docker(trans_hash):
+def start_docker(trans_hash, decryption_key):
+    cmd = """docker run --rm --network none --read-only \
+       -v compressed_model:/compressed_models/%s:rw \
+       -v encrypted_data:/encrypted_data:ro \
+       -e DECRYPTION_KEY=%s \
+       cs2-sandbox""" % (trans_hash, decryption_key)
+    p.wait()
 
 # run docker with 
 # readonly encrypted data vol and write only
