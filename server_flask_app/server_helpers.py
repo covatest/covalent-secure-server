@@ -8,6 +8,7 @@ from cova_encryption_helpers import compute_sha256_hash_file
 
 def async_ping_frontend():
     # TODO
+    urllib2.open("demo.covalent.ai/mt_status_update/something")
     return 
 
 def send_ping_to_frontend(kwargs):
