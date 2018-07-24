@@ -7,8 +7,4 @@ X, y = iris.data, iris.target
 clf.fit(X, y)  
 
 from sklearn.externals import joblib
-joblib.dump(clf, 'output.txt', compress=1) 
-
-
-clf = joblib.load('output.txt')
-print clf
+joblib.dump(clf, 'output.txt', compress=1)

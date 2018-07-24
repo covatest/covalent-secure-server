@@ -3,6 +3,6 @@ FROM python:2.7
 
 RUN pip install -U scikit-learn==0.19.2 numpy==1.14.5 scipy==1.1.0 pandas==0.23.3
 
-ADD test.py /
+ADD ./covalent-secure-models/ ./
 
-CMD ["python", "./test.py"]
+CMD ["python", "./cova_secure_model_main.py"]

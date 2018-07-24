@@ -2,8 +2,20 @@ import sys
 sys.path.append('./covalent-secure-models')
 
 from urllib2 import urlopen
+import threading
 from cova_encryption_helpers import compute_sha256_hash_file
 
+
+def async_ping_frontend():
+    # TODO
+    return 
+
+def send_ping_to_frontend(kwargs):
+    # TODO
+    thr = threading.Thread(target=async_ping_frontend, kwargs=kwargs)
+    thr.start() 
+
+    return True
 
 def fetch_file_s3(encrypted_data_hash):
     s3_url = S3_BUCKET_LINK + encrypted_data_hash + ".enc"
@@ -30,24 +42,26 @@ def download_data_file(encrypted_data_hash):
         with open(encrypted_file_path,"wb+") as f:
             f.write(data)
 
-def start_docker(trans_hash, decryption_key):
+def start_docker(trans_id, decryption_key):
+    # TODO: harder security with separated folder for encrypted data
     cmd = """docker run --rm --network none --read-only \
-       -v compressed_model:/compressed_models/%s:rw \
+       -v model_input_output:/model_input_output/%s/:rw \
        -v encrypted_data:/encrypted_data:ro \
        -e DECRYPTION_KEY=%s \
-       cs2-sandbox""" % (trans_hash, decryption_key)
+       cs2-sandbox""" % (str(trans_id), decryption_key)
+
     p.wait()
 
 # run docker with 
 # readonly encrypted data vol and write only
 # ADD the code folders
-# writeonly model directory /compressed_model/trans_hash:compressed_model:wo
+# writeonly model directory /compressed_model/trans_id:compressed_model:wo
 # p.wait()
 
 def run_model_in_docker():
     download_data_file(encrypted_data_hash)
     # docker run
-    start_docker(trans_hash)
+    start_docker(trans_id)
     # read logfile
     return {"success": True}
 
