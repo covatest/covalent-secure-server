@@ -1,6 +1,7 @@
 import boto3
 import random
 from urllib2 import urlopen
+from cova_encryption_helpers import compute_sha256_hash_file
 
 S3_ACCESS_KEY = "AKIAJR7A5QTYBLQMBOLA"
 S3_SECRET_KEY = "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"
@@ -86,7 +87,8 @@ def download_data_file(encrypted_data_hash):
 
         with open(encrypted_file_path,"wb+") as f:
             f.write(data)
-
+    else:
+        print "File locally exists"
 
 if __name__ == '__main__':
     upload_file_s3(13213)

@@ -1,8 +1,9 @@
 from __future__ import print_function
 from flask import Flask, request, jsonify
-from threading import Thread
+from multiprocessing import Process
 
 from file_helpers import save_file
+from server_helpers import full_computation_process
 from flask_cors import CORS
 
 
@@ -29,19 +30,20 @@ def train_model_file():
         return jsonify({'success': False})
         exit()
     else:
-        print(file)
         save_file(file, transaction_id)
-    # Thread(target=heavy_lift, args=(encrypted_data_hash, transaction_id)).start()
+    p = Process(target=full_computation_process, args=(encrypted_data_hash, transaction_id))
+    p.start()
 
     return jsonify({"success": True})
 
 @application.route('/ping_mt_for_file/<transaction_id>')
 def ping_mt_for_file(transaction_id):
     return jsonify({
-        "transaction_id": 31231,
-        "aws_url":123,
+        "transaction_id": transaction_id,
+        "aws_url": "",
         "success":True
     })
 
 if __name__ == '__main__':
+    # TODO: ping back to SGX once spawned
     application.run(host='0.0.0.0', port='8080')

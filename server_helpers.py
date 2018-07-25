@@ -5,8 +5,8 @@ import requests
 from threading import Thread
 import subprocess
 import struct
-# from cova_encryption_helpers import compute_sha256_hash_file
-from file_helpers import upload_file_s3
+
+from file_helpers import upload_file_s3, download_data_file
 
 
 COVA_HEADER = {
@@ -37,8 +37,7 @@ def async_ping_to_frontend(status_dict):
     return True
 
 
-def start_docker(transaction_id, 
-    decryption_key="cova_secret_key_is_the_fanciest"):
+def start_docker(transaction_id, decryption_key):
     # TODO: harden security with separated folder for encrypted data
     cmd = """docker run --rm --network none \
        -v $(pwd)/model_input_output/%s:/model_input_output:rw \
@@ -55,7 +54,7 @@ def run_model_in_docker(encrypted_data_hash, transaction_id):
     # get encryption key
     dec_key = recv_decryption_key(0)
     # docker run
-    start_docker(transaction_id)
+    start_docker(transaction_id, decryption_key=dec_key)
     # read logfile
     return {"success": True}
 
@@ -68,7 +67,6 @@ def send_back_model_params(transaction_id):
     return url
 
 def full_computation_process(encrypted_data_hash, transaction_id):
-        # run model in docker
     run_model_in_docker(encrypted_data_hash, transaction_id)
     # send post with succes
     # log status of success/failure
@@ -79,7 +77,7 @@ def full_computation_process(encrypted_data_hash, transaction_id):
     # send back model params url to MT
     send_back_model_params(transaction_id)
 
-    # release smart contract
+    # TODO: release smart contract
 
     return True
 
