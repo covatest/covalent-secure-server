@@ -5,12 +5,13 @@
 # rm get-pip.py
 # pip install gunicorn flask==1.0.2 --user # do version
 
-# wget the secure library
-# wget  https://github.com/covalent-hq/covalent-secure-server/archive/master.tar.gz
+# curl the secure library
+curl -LOk  https://github.com/covalent-hq/covalent-secure-server/archive/master.tar.gz
 # tar  -xvf master.tar.gz
 # rm master.tar.gz
 
 # build the inner docker core
+docker build -t cs2-sandbox .
 
 # start the python server
 # cd server_flask_app
