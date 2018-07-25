@@ -10,7 +10,7 @@ from file_helpers import upload_file_s3
 
 
 COVA_HEADER = {
-      'content-type': 'application/x-www-form-urlencoded'
+      'content-type': 'application/x-www-form-urlencoded',
       'origin': 'secured-origin',
       'covalent-token': '*-d@}u%dy4p6A%JF?)$+DDO2DW4vO<'
     }
@@ -46,9 +46,8 @@ def start_docker(transaction_id,
        -e DECRYPTION_KEY=%s \
        cs2-sandbox""" % (str(transaction_id), decryption_key)
 
-    subprocess.Popen(cmd)
+    p = subprocess.Popen(cmd, shell=True)
     p.wait()
-    print "HERE"
 
 
 def run_model_in_docker(encrypted_data_hash, transaction_id):
