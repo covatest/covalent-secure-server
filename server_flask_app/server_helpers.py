@@ -9,7 +9,7 @@ import struct
 # from cova_encryption_helpers import compute_sha256_hash_file
 
 ### IO Helpers
-def safe_directory_path(dir_path): 
+def safe_directory_path(dir_path):
     if not os.path.exists(dir_path):
         os.makedirs(dir_path)
 
@@ -20,13 +20,9 @@ def model_folder_path(transaction_id):
 
     return safe_directory_path(dir_path)
 
-def convert_and_save(file_data, transaction_id):
-
-    text = struct.pack("b"*len(file_data),*file_data).decode('utf8')
-
+def save_file(file, transaction_id):
     # save in a new directory
-    with open(model_file_path(transaction_id), 'wb') as f:
-        f.write(file_data)
+    file.save(model_file_path(transaction_id))
 
 def model_file_path(transaction_id):
     return model_folder_path(transaction_id) + '/cova_secure_model_main.py'
@@ -60,12 +56,12 @@ def recv_decryption_key(mt_id):
 def async_ping_frontend():
     # TODO
     urllib2.open("demo.covalent.ai/mt_status_update/something")
-    return 
+    return
 
 def send_ping_to_frontend(kwargs):
     # TODO
     thr = threading.Thread(target=async_ping_frontend, kwargs=kwargs)
-    thr.start() 
+    thr.start()
 
     return True
 
@@ -90,7 +86,7 @@ def start_docker(transaction_id, decryption_key):
     subprocess.Popen((cmd))
     p.wait()
 
-# run docker with 
+# run docker with
 # readonly encrypted data vol and write only
 # ADD the code folders
 # writeonly model directory /compressed_model/trans_id:compressed_model:wo
@@ -107,8 +103,8 @@ def run_model_in_docker(encrypted_data_hash, transaction_id):
 
 def send_back_model_params(transaction_id):
     # send the file to MT
-    
-    return 
+
+    return
 
 def full_computation_process(encrypted_data_hash, transaction_id):
         # run model in docker
