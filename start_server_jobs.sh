@@ -1,4 +1,5 @@
 #!/bin/bash
+# amzn-ami-2018.03.a-amazon-ecs-optimized (ami-5253c32d)
 wget  https://github.com/covalent-hq/covalent-secure-server/archive/master.tar.gz
 tar  -xvf master.tar.gz
 rm master.tar.gz
