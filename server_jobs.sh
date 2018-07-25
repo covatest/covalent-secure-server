@@ -1,4 +1,5 @@
 #!/bin/bash
+rm -rf covalent-secure-server-master master.tar.gz
 install python pip 
 curl https://bootstrap.pypa.io/get-pip.py -o get-pip.py
 python get-pip.py --user
