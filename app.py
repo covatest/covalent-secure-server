@@ -2,17 +2,18 @@ from __future__ import print_function
 from flask import Flask, request, jsonify
 from threading import Thread
 
-from server_helpers import save_file
+from file_helpers import save_file
 from flask_cors import CORS
 
 
 application = Flask(__name__)
 CORS(application)
 
-@application.route('/')
-def hello():
-    print("HELLO")
-    return jsonify({"a": "HELLO"})
+@application.route('/<test>')
+def hello_test(test):
+    msg = "HELLO " + test
+    print(msg)
+    return jsonify({"msg": msg})
 
 
 @application.route('/train_model_file', methods=['POST'])

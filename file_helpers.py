@@ -1,8 +1,10 @@
 import boto3
 import random
+from urllib2 import urlopen
 
 S3_ACCESS_KEY = "AKIAJR7A5QTYBLQMBOLA"
 S3_SECRET_KEY = "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"
+
 
 # s3 helpers
 def fetch_file_s3(encrypted_data_hash):
@@ -31,11 +33,12 @@ def upload_file_s3(transaction_id):
     )
 
     bucket_name = 'data-marketplace-storage'
-    source_file_path = 
+    source_file_path = model_params_file_path(transaction_id)
     path = generate_rand_filename_s3(transaction_id)
-    s3.upload_file('file_helpers.py', bucket_name, path)
+    s3.upload_file(model_params_file_path, bucket_name, path)
 
     return final_s3_url(path)
+
 
 ### IO Helpers
 def safe_directory_path(dir_path):
@@ -44,17 +47,25 @@ def safe_directory_path(dir_path):
 
     return dir_path
 
+
 def model_folder_path(transaction_id):
-    dir_path = "model_input_output/"
+    dir_path = "model_input_output/" + str(transaction_id)
 
     return safe_directory_path(dir_path)
+
 
 def save_file(file, transaction_id):
     # save in a new directory
     file.save(model_file_path(transaction_id))
 
+
 def model_file_path(transaction_id):
     return model_folder_path(transaction_id) + '/cova_secure_model_main.py'
+
+
+def model_params_file_path(transaction_id):
+    return model_folder_path(transaction_id) + '/model_params.pkl'
+
 
 # encrypted data io helpers
 def get_data_path(encrypted_data_hash):
