@@ -17,7 +17,7 @@ def train_model_file():
     data = request.get_json()
     print data
     transaction_id = data['transaction_id']
-    hash_encrypted_data = data['hash_encrypted_data']
+    encrypted_data_hash = data['encrypted_data_hash']
 
     if data is None:
         print("No valid request body, json missing!")
@@ -28,7 +28,7 @@ def train_model_file():
         file_data = data['file']['data']['data']
         convert_and_save(file_data, transaction_id)
 
-    # Thread(target=heavy_lift, args=(hash_encrypted_data, transaction_id)).start()
+    # Thread(target=heavy_lift, args=(encrypted_data_hash, transaction_id)).start()
 
     return jsonify({"success": True})
 

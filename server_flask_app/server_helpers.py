@@ -32,15 +32,15 @@ def model_file_path(transaction_id):
     return model_folder_path(transaction_id) + '/cova_secure_model_main.py'
 
 # encrypted data io helpers
-def get_data_path(hash_encrypted_data):
-    return  "./encrypted_data/" + hash_encrypted_data + ".enc"
+def get_data_path(encrypted_data_hash):
+    return  "./encrypted_data/" + encrypted_data_hash + ".enc"
 
 
-def download_data_file(hash_encrypted_data):
+def download_data_file(encrypted_data_hash):
     # download if file does not exist
     redownload = False
     try:
-        if compute_sha256_hash_file(get_data_path(hash_encrypted_data)) != hash_encrypted_data:
+        if compute_sha256_hash_file(get_data_path(encrypted_data_hash)) != encrypted_data_hash:
             redownload = True
     except Exception as e:
         redownload = True
@@ -56,22 +56,22 @@ def recv_decryption_key(mt_id):
     # TODO: v1: make get request
     return "cova_secret_key_is_the_fanciest"
 
-### Notifications helpers
-# def async_ping_frontend():
-#     # TODO
-#     urllib2.open("demo.covalent.ai/mt_status_update/something")
-#     return 
+## Notifications helpers
+def async_ping_frontend():
+    # TODO
+    urllib2.open("demo.covalent.ai/mt_status_update/something")
+    return 
 
-# def send_ping_to_frontend(kwargs):
-#     # TODO
-#     thr = threading.Thread(target=async_ping_frontend, kwargs=kwargs)
-#     thr.start() 
+def send_ping_to_frontend(kwargs):
+    # TODO
+    thr = threading.Thread(target=async_ping_frontend, kwargs=kwargs)
+    thr.start() 
 
-#     return True
+    return True
 
 # s3 helpers
-def fetch_file_s3(hash_encrypted_data):
-    s3_url = S3_BUCKET_LINK + hash_encrypted_data + ".enc"
+def fetch_file_s3(encrypted_data_hash):
+    s3_url = S3_BUCKET_LINK + encrypted_data_hash + ".enc"
 
     return urlopen(s3_url).read()
 
@@ -96,8 +96,8 @@ def start_docker(transaction_id, decryption_key):
 # writeonly model directory /compressed_model/trans_id:compressed_model:wo
 # p.wait()
 
-def run_model_in_docker(hash_encrypted_data, transaction_id):
-    download_data_file(hash_encrypted_data)
+def run_model_in_docker(encrypted_data_hash, transaction_id):
+    download_data_file(encrypted_data_hash)
     # get encryption key
     dec_key = recv_decryption_key(0)
     # docker run
@@ -110,9 +110,9 @@ def send_back_model_params(transaction_id):
     
     return 
 
-def full_computation_process(hash_encrypted_data, transaction_id):
+def full_computation_process(encrypted_data_hash, transaction_id):
         # run model in docker
-    run_model_in_docker(hash_encrypted_data, transaction_id)
+    run_model_in_docker(encrypted_data_hash, transaction_id)
     # send post with succes
     # log status of success/failure
 
