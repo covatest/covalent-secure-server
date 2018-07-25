@@ -4,7 +4,6 @@ from threading import Thread
 
 from server_helpers import save_file
 from flask_cors import CORS
-from requests_toolbelt.multipart import decoder
 
 
 application = Flask(__name__)
