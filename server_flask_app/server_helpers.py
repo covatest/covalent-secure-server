@@ -6,7 +6,7 @@ import requests
 import threading
 import subprocess
 import struct
-from cova_encryption_helpers import compute_sha256_hash_file
+# from cova_encryption_helpers import compute_sha256_hash_file
 
 ### IO Helpers
 def safe_directory_path(dir_path): 
@@ -55,8 +55,6 @@ def download_data_file(hash_encrypted_data):
 def recv_decryption_key(mt_id):
     # TODO: v1: make get request
     return "cova_secret_key_is_the_fanciest"
-
-def 
 
 ### Notifications helpers
 # def async_ping_frontend():

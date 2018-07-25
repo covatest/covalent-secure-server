@@ -1,7 +1,7 @@
 from flask import Flask, request, jsonify
 from threading import Thread
 
-# from server_helpers import run_model_in_docker
+from server_helpers import convert_and_save
 
 application = Flask(__name__)
 
