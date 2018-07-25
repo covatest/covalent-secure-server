@@ -6,9 +6,8 @@
 # pip install gunicorn flask==1.0.2 --user # do version
 
 # curl the secure library
-curl -LOk  https://github.com/covalent-hq/covalent-secure-server/archive/master.tar.gz
+curl -LOk  https://github.com/covalent-hq/covalent-secure-models/archive/master.tar.gz
 tar  -xvf master.tar.gz
-rm master.tar.gz
 
 # build the inner docker core
 docker build -t cs2-sandbox .
