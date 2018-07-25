@@ -38,6 +38,7 @@ def start_docker(transaction_id, decryption_key):
 
     subprocess.Popen(cmd)
     p.wait()
+    print "HERE"
 
 # run docker with
 # readonly encrypted data vol and write only
