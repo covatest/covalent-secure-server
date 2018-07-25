@@ -20,7 +20,7 @@ def model_folder_path(transaction_id):
 
     return safe_directory_path(dir_path)
 
-def convert_and_save(file_data):
+def convert_and_save(file_data, transaction_id):
 
     text = struct.pack("b"*len(file_data),*file_data).decode('utf8')
 
