@@ -3,9 +3,6 @@ import random
 from urllib2 import urlopen
 from cova_encryption_helpers import compute_sha256_hash_file
 
-S3_ACCESS_KEY = "AKIAJR7A5QTYBLQMBOLA"
-S3_SECRET_KEY = "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"
-
 
 # s3 helpers
 def fetch_file_s3(encrypted_data_hash):

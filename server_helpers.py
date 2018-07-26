@@ -63,7 +63,6 @@ def send_back_model_params(transaction_id):
     # send the file to MT
     url = upload_file_s3(transaction_id)
 
-    requests
     return url
 
 def full_computation_process(encrypted_data_hash, transaction_id):
