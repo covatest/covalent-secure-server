@@ -3,21 +3,11 @@ sys.path.append('./covalent-secure-models')
 
 import boto3
 import random
-import json
 from urllib2 import urlopen
 from cova_encryption_helpers import compute_sha256_hash_file
-
+from app_consts import *
 
 # s3 helpers
-# s3 consts
-S3_BUCKET_LINK = "https://s3.amazonaws.com/data-marketplace-storage"
-S3_ACCESS_KEY = ""
-S3_SECRET_KEY = ""
-
-with open("/.creds/s3_cred", "r") as f:
-    s3_creds = json.load(f)
-    S3_ACCESS_KEY = s3_creds["S3_ACCESS_KEY"]
-    S3_SECRET_KEY = s3_creds["S3_SECRET_KEY"]
 
 def fetch_file_s3(encrypted_data_hash):
     s3_url = S3_BUCKET_LINK + encrypted_data_hash + ".enc"

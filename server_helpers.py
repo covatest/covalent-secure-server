@@ -5,17 +5,10 @@ import struct
 import json
 
 from file_helpers import upload_file_s3, download_data_file, model_folder_path
+from app_const import *
 
-
-COVA_HEADER = {
-      'content-type': 'application/x-www-form-urlencoded',
-      'origin': 'secured-origin',
-      'covalent-token': '*-d@}u%dy4p6A%JF?)$+DDO2DW4vO<'
-    }
-
-def make_post_request(data, dest_url="https://marketplace-api.covalent.ai/api",
-        endpoint="", headers={}):
-    return requests.post(dest_url + endpoint, data=data, headers=COVA_HEADER)
+def make_post_request(data, dest_url=MT_API_URL, endpoint="", headers=COVA_HEADER):
+    return requests.post(dest_url + endpoint, data=data, headers=headers)
 
 
 ## Notifications helpers
@@ -48,7 +41,6 @@ def run_model_in_docker(encrypted_data_hash, transaction_id):
     # get encryption key
     dec_key = recv_decryption_key(0, transaction_id)
     # TODO: got decryption key from DO
-
     # docker run
     # TODO: Started secure environment inside CS2
     # * Decrypted data and started training models inside offline sandboxes
@@ -69,7 +61,21 @@ def send_back_model_params(final_params):
     return make_post_request(final_params, endpoint="/final-status")
 
 
-def full_computation_process(encrypted_data_hash, transaction_id):
+def release_smart_contract(smart_contract_id, success):
+    # TODO: release smart contract
+    num_tried = 0
+    while num_tried < NUM_TRY_BDB:
+        r = requests.get(SGX_URL + '/release_smart_contract/%s/%d' (smart_contract_id, success))
+        data = json.loads(r.content)
+
+        if not data["error"]:
+            break
+        else:
+            num_tried += 1
+
+    return num_tried < NUM_TRY_BDB
+
+def full_computation_process(encrypted_data_hash, transaction_id, smart_contract_id):
     print("started processing running docker")
     run_model_in_docker(encrypted_data_hash, transaction_id)
     print("ran docker docker")
@@ -92,11 +98,12 @@ def full_computation_process(encrypted_data_hash, transaction_id):
 
     print("final params")
 
-    # send back model params url to MT
+    # send back model params url to MT after releasing
+    release_success = release_smart_contract(smart_contract_id, int(success))
     send_back_model_params(final_params)
-
-    # TODO: release smart contract
-
+        
+    print "smart contract realease: ", release_success
+    
     return True
 
 if __name__ == '__main__':
