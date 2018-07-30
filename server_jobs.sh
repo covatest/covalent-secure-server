@@ -15,4 +15,4 @@ mv covalent-secure-models-master covalent-secure-models
 # build the inner docker core
 docker build -t cs2-sandbox .
 
-gunicorn -w 3 -b 0.0.0.0:8080 wsgi
+nohup gunicorn -w 3 -b 0.0.0.0:8080 wsgi 2>&1 > server.log &
