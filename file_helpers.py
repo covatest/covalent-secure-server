@@ -33,8 +33,8 @@ def generate_rand_filename_s3(transaction_id):
     return path
 
 
-def final_s3_url(data_hash):
-    return S3_BUCKET_LINK + '/encrypted_data/' + data_hash + '.enc'
+def final_s3_url(path):
+    return S3_BUCKET_LINK + "/" + path
 
 
 def upload_file_s3(transaction_id):
@@ -47,7 +47,8 @@ def upload_file_s3(transaction_id):
     bucket_name = 'data-marketplace-storage'
     source_file_path = model_params_file_path(transaction_id)
     path = generate_rand_filename_s3(transaction_id)
-    s3.upload_file(model_params_file_path, bucket_name, path)
+    print path, type(path)
+    s3.upload_file(source_file_path, bucket_name, path)
 
     return final_s3_url(path)
 
@@ -73,11 +74,11 @@ def save_file(file, transaction_id):
     return {"success": True}
 
 def model_file_path(transaction_id):
-    return model_folder_path(transaction_id) + '/cova_secure_model_main.py'
+    return model_folder_path(transaction_id) + '/cova_secure_model_train.py'
 
 
 def model_params_file_path(transaction_id):
-    return model_folder_path(transaction_id) + '/model_params.pkl'
+    return model_folder_path(transaction_id) + '/model_param.pkl'
 
 
 # encrypted data io helpers

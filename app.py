@@ -18,6 +18,7 @@ def hello_test(test):
 
 @application.route('/train_model_file', methods=['POST'])
 def train_model_file():
+	# TODO: Installed necessary dependencies and built docker environment
     # process file
     data = request.form
     transaction_id = data['transaction_id']
@@ -30,6 +31,9 @@ def train_model_file():
         exit()
     else:
         save_file(file, transaction_id)
+        # TODO: Recieved data from MT
+
+    print("got and save file")
     p = Process(target=full_computation_process, args=(encrypted_data_hash, transaction_id))
     p.start()
 
