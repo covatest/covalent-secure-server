@@ -10,17 +10,16 @@ from flask_cors import CORS
 application = Flask(__name__)
 CORS(application)
 
-@application.route('/<test>')
+@application.route('/test/<test>')
 def hello_test(test):
     msg = "HELLO " + test
     print(msg)
     return jsonify({"msg": msg})
 
-
 @application.route('/train_model_file', methods=['POST'])
 def train_model_file():
     # process file
-    data = request.form;
+    data = request.form
     transaction_id = data['transaction_id']
     encrypted_data_hash = data['encrypted_data_hash']
     file = request.files['file']
@@ -38,10 +37,11 @@ def train_model_file():
 
 @application.route('/ping_mt_for_file/<transaction_id>')
 def ping_mt_for_file(transaction_id):
+
     return jsonify({
         "transaction_id": transaction_id,
         "aws_url": "",
-        "success":True
+        "success": True
     })
 
 if __name__ == '__main__':

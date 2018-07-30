@@ -1,6 +1,3 @@
-import sys, os
-sys.path.append('./covalent-secure-models')
-
 import requests
 from threading import Thread
 import subprocess
@@ -15,14 +12,9 @@ COVA_HEADER = {
       'covalent-token': '*-d@}u%dy4p6A%JF?)$+DDO2DW4vO<'
     }
 
-def make_post_request(data, dest_url="https://marketplace.covalent.ai/api",
+def make_post_request(data, dest_url="https://marketplace-api.covalent.ai/api",
         endpoint="", headers={}):
     return requests.post(dest_url + endpoint, data=data, headers=COVA_HEADER)
-
-
-def recv_decryption_key(mt_id):
-    # TODO: v1: make get request
-    return "cova_secret_key_is_the_fanciest"
 
 
 ## Notifications helpers
@@ -45,6 +37,7 @@ def start_docker(transaction_id, decryption_key):
        -e DECRYPTION_KEY=%s \
        cs2-sandbox""" % (str(transaction_id), decryption_key)
 
+    # TODO: change shell=False to harder security
     p = subprocess.Popen(cmd, shell=True)
     p.wait()
 
@@ -52,33 +45,53 @@ def start_docker(transaction_id, decryption_key):
 def run_model_in_docker(encrypted_data_hash, transaction_id):
     download_data_file(encrypted_data_hash)
     # get encryption key
-    dec_key = recv_decryption_key(0)
+    dec_key = recv_decryption_key(0, transaction_id)
     # docker run
-    start_docker(transaction_id, decryption_key=dec_key)
+    # start_docker(transaction_id, decryption_key=dec_key)
     # read logfile
     return {"success": True}
 
 
-def send_back_model_params(transaction_id):
-    # send the file to MT
-    url = upload_file_s3(transaction_id)
+def recv_decryption_key(mt_id, transaction_id):
+    # TODO: v1: make get request
+    # i.e. verify smart contract in covachain and auto return key from
+    # a concensus key server
+    return "cova_secret_key_is_the_fanciest"
 
-    return url
+
+def send_back_model_params(final_params):
+    return make_post_request(final_params, endpoint="/final-status")
+
 
 def full_computation_process(encrypted_data_hash, transaction_id):
     run_model_in_docker(encrypted_data_hash, transaction_id)
     # send post with succes
-    # log status of success/failure
 
-    # upload file to s3
-    upload_file_s3(transaction_id)
+    # log status of success/failure
+    # TODO: check
+    success = True
+    # check success
+    final_params = {"transaction_id": transaction_id, "s3_url": "",
+        "success": success, "status_code": 1}
+
+    if success:
+        # upload file to s3
+        param_url = upload_file_s3(transaction_id)
+        final_params["s3_url"] = param_url
 
     # send back model params url to MT
-    send_back_model_params(transaction_id)
+    send_back_model_params(final_params)
 
     # TODO: release smart contract
 
     return True
 
 if __name__ == '__main__':
-    start_docker(0)
+    # start_docker(0)
+    for i in range(5):
+        print make_post_request({
+          "mt_id": 1,
+          "transaction_id": 1,
+          "status_code": 0,
+          "status_msg": 'Test Message ' + str(i)
+        }, endpoint="/status/status_update_mt")
