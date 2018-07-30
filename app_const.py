@@ -19,5 +19,16 @@ with open("/.creds/s3_cred", "r") as f:
     S3_ACCESS_KEY = s3_creds["S3_ACCESS_KEY"]
     S3_SECRET_KEY = s3_creds["S3_SECRET_KEY"]
 
-SGX_URL = "http://covachain.covalent.ai"
+COVA_CLAVE_URL = "http://covachain.covalent.ai"
 NUM_TRY_BDB = 5
+
+
+STATUS_MSG = {
+    "start_built" : "Installed necessary dependencies and built a secure sandbox environment",
+    "file_got_mt": "Recieved data from the Data User",
+    "key_got_do": "Recieved data decryption key from the Data Owner",
+    "starting_docker": "Decrypting data and starting model training inside offline sandboxes",
+    "upload_s3": "Uploading the trained model to a bucket",
+    "contract_release": "Smart contract executed and DO was credited. Sending model to Data User"
+
+}

@@ -17,7 +17,7 @@ def status_update_frontend(status_dict):
 
 
 def async_ping_to_frontend(status_dict):
-    thr = Thread(target=async_ping_frontend, args=(status_dict,))
+    thr = Thread(target=status_update_frontend, args=(status_dict,))
     thr.start()
 
     return True
@@ -40,7 +40,7 @@ def run_model_in_docker(encrypted_data_hash, transaction_id):
     download_data_file(encrypted_data_hash)
     # get encryption key
     dec_key = recv_decryption_key(0, transaction_id)
-    # TODO: got decryption key from DO
+    async_ping_frontend()
     # docker run
     # TODO: Started secure environment inside CS2
     # * Decrypted data and started training models inside offline sandboxes
@@ -54,6 +54,8 @@ def recv_decryption_key(mt_id, transaction_id):
     # TODO: v1: make get request
     # i.e. verify smart contract in covachain and auto return key from
     # a concensus key server
+    async_ping_to_frontend(STATUS_MSG["key_got_do"])
+    
     return "cova_secret_key_is_the_fanciest"
 
 
@@ -65,7 +67,7 @@ def release_smart_contract(smart_contract_id, success):
     # TODO: release smart contract
     num_tried = 0
     while num_tried < NUM_TRY_BDB:
-        r = requests.get(SGX_URL + '/release_smart_contract/%s/%d' (smart_contract_id, success))
+        r = requests.get(COVA_CLAVE_URL + '/release_smart_contract/%s/%d' (smart_contract_id, success))
         data = json.loads(r.content)
 
         if not data["error"]:
@@ -77,7 +79,10 @@ def release_smart_contract(smart_contract_id, success):
 
 def full_computation_process(encrypted_data_hash, transaction_id, smart_contract_id):
     print("started processing running docker")
+    async_ping_to_frontend(STATUS_MSG["starting_docker"])
+
     run_model_in_docker(encrypted_data_hash, transaction_id)
+
     print("ran docker docker")
     # send post with succes
 
@@ -86,6 +91,7 @@ def full_computation_process(encrypted_data_hash, transaction_id, smart_contract
         status = json.load(f)
         success, msg = status["success"], status["msg"]
 
+    async_ping_to_frontend(msg)
     # check success
     # TODO: warning status codes
     final_params = {"transaction_id": transaction_id, "s3_url": "",
@@ -93,6 +99,7 @@ def full_computation_process(encrypted_data_hash, transaction_id, smart_contract
 
     if success:
         # upload file to s3
+        async_ping_to_frontend(STATUS_MSG["upload_s3"])
         param_url = upload_file_s3(transaction_id)
         final_params["s3_url"] = param_url
 
@@ -101,9 +108,10 @@ def full_computation_process(encrypted_data_hash, transaction_id, smart_contract
     # send back model params url to MT after releasing
     release_success = release_smart_contract(smart_contract_id, int(success))
     send_back_model_params(final_params)
+    async_ping_to_frontend(STATUS_MSG["contract_release"])
         
     print "smart contract realease: ", release_success
-    
+
     return True
 
 if __name__ == '__main__':
