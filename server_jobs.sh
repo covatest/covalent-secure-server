@@ -5,8 +5,7 @@ rm -rf covalent-secure-server-master master.tar.gz
 curl https://bootstrap.pypa.io/get-pip.py -o get-pip.py
 python get-pip.py --user
 rm get-pip.py
-pip install gunicorn==19.9.0 flask==1.0.2 Flask-Cors==3.0.6 boto3==1.4.1 pynacl==1.2.1
- --user 
+pip install gunicorn==19.9.0 flask==1.0.2 Flask-Cors==3.0.6 boto3==1.4.1 pynacl==1.2.1 --user 
 
 # curl the secure library
 curl -LOk  https://github.com/covalent-hq/covalent-secure-models/archive/master.tar.gz
