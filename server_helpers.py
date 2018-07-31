@@ -16,7 +16,7 @@ def status_update_frontend(status_dict):
     return make_post_request(status_dict, endpoint="/status/status_update_mt")
 
 
-def async_ping_to_frontend(status_msg, transaction_id, status_code=0):
+def async_ping_to_frontend(status_msg, transaction_id, status_code=100):
     status_dict = {"status_msg": status_msg, "transaction_id": transaction_id,
         "status_code": status_code}
     status_update_frontend(status_dict)

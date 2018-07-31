@@ -16,3 +16,5 @@ mv covalent-secure-models-master covalent-secure-models
 docker build -t cs2-sandbox .
 
 nohup gunicorn -w 3 -b 0.0.0.0:8080 wsgi 2>&1 > server.log &
+
+# screen -d -m gunicorn -w 3 -b 0.0.0.0:8080 wsgi

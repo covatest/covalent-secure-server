@@ -86,7 +86,7 @@ def download_data_file(encrypted_data_hash):
         redownload = True
 
     if redownload:
-        data = fetch_file_s3(data_hash)
+        data = fetch_file_s3(encrypted_data_hash)
 
         with open(encrypted_file_path,"wb+") as f:
             f.write(data)
